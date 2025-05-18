@@ -47,9 +47,20 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
   const [maxDaysInput, setMaxDaysInput] = useState(31);
   const [maxDaysOutput, setMaxDaysOutput] = useState(30);
   
-  // Array of years for selection
-  const gregorianYears = Array.from({ length: 201 }, (_, i) => 1900 + i);
-  const hijriYears = Array.from({ length: 201 }, (_, i) => 1400 + i);
+  // Calculate year ranges: 200 years in the past and 100 years in the future
+  const currentYear = today.getFullYear();
+  const currentHijriYear = hijriDate.year;
+  
+  // Array of years for selection (200 years in the past, 100 in the future)
+  const gregorianYears = Array.from(
+    { length: 301 }, 
+    (_, i) => currentYear - 200 + i
+  );
+  
+  const hijriYears = Array.from(
+    { length: 301 }, 
+    (_, i) => currentHijriYear - 200 + i
+  );
   
   // Array of months for selection (1-12)
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
