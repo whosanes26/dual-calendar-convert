@@ -148,6 +148,18 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
     return `${month} - ${getMonthName(month, calendar, language)}`;
   };
   
+  // Format date for result display
+  const formatDateResult = (date: CalendarDate): string => {
+    const weekday = getWeekdayName(date, language);
+    const monthName = getMonthName(date.month, date.type, language);
+    
+    if (language === 'en') {
+      return `${weekday}, ${date.day} ${monthName} ${date.year}`;
+    } else {
+      return `${weekday}، ${date.day} ${monthName} ${date.year}`;
+    }
+  };
+  
   return (
     <div className="max-w-4xl mx-auto my-8 px-4">
       <h2 className="calendar-heading mx-auto text-center">
@@ -185,9 +197,6 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-sm text-islamic-navy/70 mt-2">
-                  {inputWeekday}
-                </p>
               </div>
               
               <div>
@@ -262,9 +271,6 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
               <div>
                 <p className="input-label">{language === 'en' ? 'Day' : 'اليوم'}</p>
                 <p className="date-select">{outputDate.day}</p>
-                <p className="text-sm text-islamic-navy/70 mt-2">
-                  {outputWeekday}
-                </p>
               </div>
               
               <div>
@@ -279,6 +285,41 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                 <p className="date-select">{outputDate.year}</p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+      
+      {/* Result Display with Day of Week */}
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="result-card">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-medium mb-2">
+              {inputType === 'gregorian'
+                ? (language === 'en' ? 'Gregorian Date' : 'التاريخ الميلادي')
+                : (language === 'en' ? 'Hijri Date' : 'التاريخ الهجري')}
+            </h3>
+            <p className="text-xl font-bold text-islamic-navy">
+              {formatDateResult(inputDate)}
+            </p>
+            <p className="text-sm text-islamic-navy/70 mt-1">
+              {inputWeekday}
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card className="result-card">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-medium mb-2">
+              {inputType === 'hijri'
+                ? (language === 'en' ? 'Gregorian Date' : 'التاريخ الميلادي')
+                : (language === 'en' ? 'Hijri Date' : 'التاريخ الهجري')}
+            </h3>
+            <p className="text-xl font-bold text-islamic-navy">
+              {formatDateResult(outputDate)}
+            </p>
+            <p className="text-sm text-islamic-navy/70 mt-1">
+              {outputWeekday}
+            </p>
           </CardContent>
         </Card>
       </div>
