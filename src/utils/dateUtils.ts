@@ -1,4 +1,3 @@
-
 import { format } from "date-fns";
 import { ar, enUS } from "date-fns/locale";
 
@@ -139,7 +138,11 @@ export function convertHijriToGregorian(date: CalendarDate): CalendarDate {
 // Format the current date and time according to the language
 export function formatCurrentDateTime(language: LanguageType = 'en'): string {
   const now = new Date();
-  const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+  const options = { 
+    hour: "2-digit" as const, 
+    minute: "2-digit" as const, 
+    hour12: true 
+  };
   
   // Get formatted time
   const timeFormatter = new Intl.DateTimeFormat(language === 'en' ? 'en-US' : 'ar-SA', options);

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { 
@@ -138,7 +137,7 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
         {language === 'en' ? 'Calendar Converter' : 'محول التقويم'}
       </h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
         {/* Input Calendar */}
         <Card className="calendar-container">
           <CardHeader className="pb-2">
@@ -169,6 +168,9 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                     ))}
                   </SelectContent>
                 </Select>
+                <p className="text-sm text-islamic-navy/70 mt-2">
+                  {inputWeekday}
+                </p>
               </div>
               
               <div>
@@ -214,16 +216,12 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                   </SelectContent>
                 </Select>
               </div>
-              
-              <p className="text-sm text-islamic-navy/70 mt-2">
-                {inputWeekday}
-              </p>
             </div>
           </CardContent>
         </Card>
         
         {/* Swap Button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center items-center">
           <Button 
             onClick={handleSwapCalendars}
             variant="outline" 
@@ -247,6 +245,9 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
               <div>
                 <p className="input-label">{language === 'en' ? 'Day' : 'اليوم'}</p>
                 <p className="date-select">{outputDate.day}</p>
+                <p className="text-sm text-islamic-navy/70 mt-2">
+                  {outputWeekday}
+                </p>
               </div>
               
               <div>
@@ -260,10 +261,6 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                 <p className="input-label">{language === 'en' ? 'Year' : 'السنة'}</p>
                 <p className="date-select">{outputDate.year}</p>
               </div>
-              
-              <p className="text-sm text-islamic-navy/70 mt-2">
-                {outputWeekday}
-              </p>
             </div>
           </CardContent>
         </Card>
