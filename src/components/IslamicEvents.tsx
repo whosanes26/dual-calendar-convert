@@ -29,10 +29,10 @@ const IslamicEvents: React.FC<IslamicEventsProps> = ({ language, currentDate }) 
   // Get upcoming Islamic events
   const events = getUpcomingIslamicEvents(currentDate, 8);
   
-  // Format the date display
+  // Format the date display with month number
   const formatDate = (date: CalendarDate) => {
     const monthName = getMonthName(date.month, date.type, language);
-    return `${date.day} ${monthName} ${date.year}`;
+    return `${date.day} (${date.month}) ${monthName} ${date.year}`;
   };
   
   return (

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { 
@@ -131,6 +132,11 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
   const inputWeekday = getWeekdayName(inputDate, language);
   const outputWeekday = getWeekdayName(outputDate, language);
   
+  // Format month display with number
+  const formatMonthLabel = (month: number, calendar: 'gregorian' | 'hijri') => {
+    return `${month} - ${getMonthName(month, calendar, language)}`;
+  };
+  
   return (
     <div className="max-w-4xl mx-auto my-8 px-4">
       <h2 className="calendar-heading mx-auto text-center">
@@ -189,7 +195,7 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                   <SelectContent>
                     {months.map(month => (
                       <SelectItem key={`input-month-${month}`} value={month.toString()}>
-                        {getMonthName(month, inputType, language)}
+                        {formatMonthLabel(month, inputType)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -253,7 +259,7 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
               <div>
                 <p className="input-label">{language === 'en' ? 'Month' : 'الشهر'}</p>
                 <p className="date-select">
-                  {getMonthName(outputDate.month, outputDate.type, language)}
+                  {outputDate.month} - {getMonthName(outputDate.month, outputDate.type, language)}
                 </p>
               </div>
               
