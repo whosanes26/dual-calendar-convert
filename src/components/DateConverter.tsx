@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CalendarDate, convertGregorianToHijri, convertHijriToGregorian, getMonthName, getWeekdayName, getMaxDayForMonth } from '@/utils/dateUtils';
-import { ChevronRight } from "lucide-react";
+import { ArrowLeftRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 interface DateConverterProps {
@@ -159,6 +159,16 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
       return `${weekday}، ${date.day} ${monthName} ${date.year}`;
     }
   };
+
+  // Convert number to Arabic numerals if language is Arabic
+  const formatNumber = (num: number): string => {
+    if (language !== 'ar') return num.toString();
+    
+    const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    return num.toString().split('').map(digit => 
+      isNaN(parseInt(digit)) ? digit : arabicNumerals[parseInt(digit)]
+    ).join('');
+  };
   
   return (
     <div className="max-w-4xl mx-auto my-8 px-4">
@@ -166,9 +176,9 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
         {language === 'en' ? 'Calendar Converter' : 'محول التقويم'}
       </h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-center">
         {/* Input Calendar */}
-        <Card className="calendar-container">
+        <Card className="calendar-container md:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-xl font-bold">
               {inputType === 'gregorian' 
@@ -192,7 +202,7 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                   <SelectContent>
                     {inputDays.map(day => (
                       <SelectItem key={`input-day-${day}`} value={day.toString()}>
-                        {day}
+                        {formatNumber(day)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -215,7 +225,10 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                   <SelectContent>
                     {months.map(month => (
                       <SelectItem key={`input-month-${month}`} value={month.toString()}>
-                        {formatMonthLabel(month, inputType)}
+                        {language === 'ar' 
+                          ? `${formatNumber(month)} - ${getMonthName(month, inputType, language)}`
+                          : formatMonthLabel(month, inputType)
+                        }
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -236,7 +249,7 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
                   <SelectContent>
                     {(inputType === 'gregorian' ? gregorianYears : hijriYears).map(year => (
                       <SelectItem key={`input-year-${year}`} value={year.toString()}>
-                        {year}
+                        {formatNumber(year)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -247,18 +260,18 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
         </Card>
         
         {/* Swap Button */}
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center md:col-span-1">
           <Button 
             onClick={handleSwapCalendars}
             variant="outline" 
-            className="rounded-full w-12 h-12 flex items-center justify-center border-islamic-teal text-islamic-teal hover:bg-islamic-teal hover:text-white rotate-90 md:rotate-0"
+            className="rounded-full w-12 h-12 flex items-center justify-center border-islamic-teal text-islamic-teal hover:bg-islamic-teal hover:text-white"
           >
-            <ChevronRight className="h-6 w-6" />
+            <ArrowLeftRight className="h-6 w-6" />
           </Button>
         </div>
         
         {/* Output Calendar */}
-        <Card className="calendar-container">
+        <Card className="calendar-container md:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="text-xl font-bold">
               {inputType === 'hijri' 
@@ -270,19 +283,22 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
             <div className="space-y-4">
               <div>
                 <p className="input-label">{language === 'en' ? 'Day' : 'اليوم'}</p>
-                <p className="date-select">{outputDate.day}</p>
+                <p className="date-select">{language === 'ar' ? formatNumber(outputDate.day) : outputDate.day}</p>
               </div>
               
               <div>
                 <p className="input-label">{language === 'en' ? 'Month' : 'الشهر'}</p>
                 <p className="date-select">
-                  {outputDate.month} - {getMonthName(outputDate.month, outputDate.type, language)}
+                  {language === 'ar' 
+                    ? `${formatNumber(outputDate.month)} - ${getMonthName(outputDate.month, outputDate.type, language)}`
+                    : `${outputDate.month} - ${getMonthName(outputDate.month, outputDate.type, language)}`
+                  }
                 </p>
               </div>
               
               <div>
                 <p className="input-label">{language === 'en' ? 'Year' : 'السنة'}</p>
-                <p className="date-select">{outputDate.year}</p>
+                <p className="date-select">{language === 'ar' ? formatNumber(outputDate.year) : outputDate.year}</p>
               </div>
             </div>
           </CardContent>
@@ -336,3 +352,4 @@ const DateConverter: React.FC<DateConverterProps> = ({ language }) => {
 };
 
 export default DateConverter;
+
